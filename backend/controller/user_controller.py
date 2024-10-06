@@ -21,7 +21,10 @@ def login(db,secret_key):
         return jsonify({'error':"Invalid email or password"}),401
     
     token = jwt.encode(
-        {"user_id": str(user["_id"]), "exp": datetime.utcnow() + timedelta(hours=24)},
+        {
+            "sub": str(user["_id"]),
+            "exp": datetime.utcnow() + timedelta(hours=24)
+        },
         secret_key,
         algorithm="HS256"
     )
@@ -45,10 +48,14 @@ def signup(db, secret_key):
     if db.users.find_one({"email": email}):
         return jsonify({"error": "User with this email already exists"}), 409
 
-    token = jwt.encode({
-        "email": email,
-        "exp": datetime.utcnow() + timedelta(days=1)
-    }, secret_key, algorithm="HS256")
+    token = jwt.encode(
+        {
+            "sub": email,
+            "exp": datetime.utcnow() + timedelta(days=1)
+        },
+        secret_key,
+        algorithm="HS256"
+    )
 
     user = User(name=name, email=email, mobile_no=mobile_no, password=password, user_image=user_image, token=token)
 
