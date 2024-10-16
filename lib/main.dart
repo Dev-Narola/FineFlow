@@ -1,6 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:fineflow0/bottom_bar.dart';
+import 'package:fineflow0/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -21,14 +21,14 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'First Method',
+          title: 'FineFlow',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
           home: child,
         );
       },
-      child: const BottomBar(),
+      child: SplashScreen(),
     );
   }
 }

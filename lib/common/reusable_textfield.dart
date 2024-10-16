@@ -3,6 +3,7 @@
 import 'package:fineflow0/constant/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReusableTextfield extends StatelessWidget {
@@ -11,6 +12,7 @@ class ReusableTextfield extends StatelessWidget {
   final Icon? prefixIcon;
   final Color? prefixIconColor;
   final TextInputType? textInputType;
+  final TextInputFormatter? inputFormatter;
   const ReusableTextfield({
     super.key,
     required this.hintText,
@@ -18,10 +20,12 @@ class ReusableTextfield extends StatelessWidget {
     this.prefixIcon,
     this.prefixIconColor,
     this.textInputType,
+    this.inputFormatter,
   });
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController sample = TextEditingController();
     return TextFormField(
       decoration: InputDecoration(
         hintText: hintText,
@@ -41,7 +45,7 @@ class ReusableTextfield extends StatelessWidget {
             borderSide: const BorderSide(color: Kdark, width: 1.3)),
       ),
       cursorColor: Kdark,
-      controller: controller,
+      controller: controller ?? sample,
       keyboardType: textInputType,
       style: const TextStyle(color: Kdark),
     );

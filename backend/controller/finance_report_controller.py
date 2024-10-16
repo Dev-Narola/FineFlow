@@ -77,4 +77,23 @@ def get_all_reports_for_user(db):
     if not reports:
         return jsonify({"message": "No reports found"}), 404
 
-    return jsonify([report for report in reports]), 200
+    for report in reports:
+        report["_id"] = str(report["_id"])
+        report["user_id"] = str(report["user_id"])
+
+    return jsonify(reports), 200
+
+
+def get_all_reports_for_user(db):
+    user_id = get_jwt_identity()
+
+    reports = list(db.finance_reports.find({"user_id": ObjectId(user_id)}))
+
+    if not reports:
+        return jsonify({"message": "No reports found", "reports": []}), 200
+
+    for report in reports:
+        report["_id"] = str(report["_id"])
+        report["user_id"] = str(report["user_id"])
+
+    return jsonify({"message": "Sucessfully get response", "reports": reports}), 200

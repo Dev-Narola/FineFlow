@@ -2,7 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 
 class User:
-    def __init__(self, name, email, mobile_no, password, user_image=None, token=None):
+    def __init__(self, name, email, mobile_no, password, user_image="https://img.freepik.com/premium-vector/portrait-happy-business-man-avatar-hand-drawn-doodle-cartoon-style-vector-illustration_1044602-55.jpg", token=None):
         self.id = ObjectId()
         self.name = name
         self.email = email

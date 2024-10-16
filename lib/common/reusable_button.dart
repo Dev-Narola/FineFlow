@@ -7,7 +7,7 @@ class ReusableButton extends StatelessWidget {
   final String content;
   final double? btnHeight;
   final double? btnWidth;
-  final VoidCallback? onTap;
+  final Function()? onTap;
   final Color? borderColor;
   final Color? backgroundColor;
   final Color? textColor;

@@ -3,7 +3,7 @@
 import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/common/reusable_textfield.dart';
 import 'package:fineflow0/constant/constant.dart';
-import 'package:fineflow0/screens/add_expanse/create_expanse_report.dart';
+import 'package:fineflow0/controller/finance_report_controller.dart';
 import 'package:fineflow0/screens/add_expanse/widgets/image_select_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +12,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
 
 class RadioButtons extends StatefulWidget {
+  // final String reportName
   const RadioButtons({super.key});
 
   @override
@@ -19,6 +20,17 @@ class RadioButtons extends StatefulWidget {
 }
 
 class RadioButtonsState extends State<RadioButtons> {
+  final FinanceReportController controller1 =
+      Get.put(FinanceReportController());
+
+  final TextEditingController reportNameController = TextEditingController();
+  final TextEditingController merchantNameController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  String dropdownValue = 'Food';
+  bool isSwitched = false;
+
   final List<String> list = <String>[
     'Food',
     'Traveling',
@@ -29,10 +41,6 @@ class RadioButtonsState extends State<RadioButtons> {
 
   int _selectedValue = 0;
 
-  // Move dropdownValue here
-  String dropdownValue = 'Food';
-  bool isSwitched = false;
-  // Initial value
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -69,10 +77,8 @@ class RadioButtonsState extends State<RadioButtons> {
           },
         ),
         SizedBox(height: 16.h),
-        if (_selectedValue == 1)
-          _buildForm()
-        else if (_selectedValue == 2)
-          _buildScanButton(),
+        if (_selectedValue == 1) _buildForm(),
+        if (_selectedValue == 2) _buildScanButton(),
       ],
     );
   }
@@ -82,14 +88,27 @@ class RadioButtonsState extends State<RadioButtons> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ReusableText(
+          text: "Report Title",
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Kdark,
+        ),
+        SizedBox(height: 8.h),
+        ReusableTextfield(
+          hintText: "Report title",
+          controller: reportNameController,
+        ),
+        SizedBox(height: 12.h),
+        const ReusableText(
           text: "Merchant Name",
           fontSize: 16,
           fontWeight: FontWeight.w600,
           color: Kdark,
         ),
         SizedBox(height: 8.h),
-        const ReusableTextfield(
+        ReusableTextfield(
           hintText: "name",
+          controller: merchantNameController,
         ),
         SizedBox(height: 12.h),
         const ReusableText(
@@ -99,12 +118,14 @@ class RadioButtonsState extends State<RadioButtons> {
           color: Kdark,
         ),
         SizedBox(height: 8.h),
-        const ReusableTextfield(
+        ReusableTextfield(
+          textInputType: TextInputType.number,
           hintText: "amount",
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             LineIcons.indianRupeeSign,
             size: 20,
           ),
+          controller: amountController,
         ),
         SizedBox(height: 12.h),
         const ReusableText(
@@ -114,11 +135,30 @@ class RadioButtonsState extends State<RadioButtons> {
           color: Kdark,
         ),
         SizedBox(height: 12.h),
-        const ReusableTextfield(
-          hintText: "dd - mm - yyyy",
-          prefixIcon: Icon(
-            LineIcons.calendar,
-            size: 20,
+        GestureDetector(
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2101),
+            );
+            if (pickedDate != null) {
+              String formattedDate =
+                  "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+              dateController.text = formattedDate;
+            }
+          },
+          child: AbsorbPointer(
+            child: ReusableTextfield(
+              hintText: "dd-mm-yyyy",
+              prefixIcon: const Icon(
+                LineIcons.calendar,
+                size: 20,
+              ),
+              controller: dateController,
+              textInputType: TextInputType.datetime,
+            ),
           ),
         ),
         SizedBox(height: 12.h),
@@ -129,8 +169,9 @@ class RadioButtonsState extends State<RadioButtons> {
           color: Kdark,
         ),
         SizedBox(height: 12.h),
-        const ReusableTextfield(
+        ReusableTextfield(
           hintText: "description",
+          controller: descriptionController,
         ),
         SizedBox(height: 12.h),
         const ReusableText(
@@ -184,18 +225,22 @@ class RadioButtonsState extends State<RadioButtons> {
             Transform.scale(
               scale: 0.85,
               child: Switch(
-                  inactiveThumbColor: Kwhite,
-                  inactiveTrackColor: Kgray,
-                  activeTrackColor: Kdark,
-                  value: isSwitched,
-                  onChanged: (value) {
-                    setState(() {
-                      isSwitched = value;
-                    });
-                  }),
+                inactiveThumbColor: Kwhite,
+                inactiveTrackColor: Kgray,
+                activeTrackColor: Kdark,
+                value: isSwitched,
+                onChanged: (value) {
+                  setState(() {
+                    isSwitched = value;
+                  });
+                },
+              ),
             ),
             const ReusableText(
-                text: "Include VAT tax", color: Kdark, fontSize: 15)
+              text: "Include VAT tax",
+              color: Kdark,
+              fontSize: 15,
+            ),
           ],
         ),
         if (isSwitched)
@@ -216,15 +261,28 @@ class RadioButtonsState extends State<RadioButtons> {
         SizedBox(height: 24.h),
         GestureDetector(
           onTap: () {
-            Get.to(() => const CreateExpanseReport());
+            try {
+              // double amount = double.tryParse(amountController);
+              controller1.addReport(
+                  reportNameController.text.trim(),
+                  merchantNameController.text.trim(),
+                  double.tryParse(amountController.text) ?? 0.0,
+                  dateController.text.trim(),
+                  descriptionController.text.trim(),
+                  dropdownValue);
+            } catch (e) {
+              Get.snackbar("Error", "Please check the entered data.");
+              print("Form error: $e");
+            }
           },
           child: Container(
             height: 45.h,
             width: double.maxFinite,
             decoration: BoxDecoration(
-                color: Kdark,
-                borderRadius: BorderRadius.circular(14.r),
-                border: Border.all(color: Kdark, width: 1.2)),
+              color: Kdark,
+              borderRadius: BorderRadius.circular(14.r),
+              border: Border.all(color: Kdark, width: 1.2),
+            ),
             child: Center(
               child: ReusableText(
                 text: "S A V E   E X P A N S E ",
@@ -235,7 +293,7 @@ class RadioButtonsState extends State<RadioButtons> {
             ),
           ),
         ),
-        SizedBox(height: 30.h)
+        SizedBox(height: 30.h),
       ],
     );
   }
@@ -268,33 +326,10 @@ class RadioButtonsState extends State<RadioButtons> {
                       text: "Upload Image",
                       color: Kgray,
                       fontWeight: FontWeight.w500,
-                      letterSpace: 1.5,
-                      fontSize: 16,
+                      letterSpace: 1.2,
                     ),
                   ],
                 ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 45.h),
-        GestureDetector(
-          onTap: () {
-            Get.to(() => const CreateExpanseReport());
-          },
-          child: Container(
-            height: 45.h,
-            width: double.maxFinite,
-            decoration: BoxDecoration(
-                color: Kdark,
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(color: Kdark, width: 1.2)),
-            child: Center(
-              child: ReusableText(
-                text: "S A V E   E X P A N S E ",
-                fontSize: 14.sp,
-                fontWeight: FontWeight.bold,
-                color: Koffwhite,
               ),
             ),
           ),

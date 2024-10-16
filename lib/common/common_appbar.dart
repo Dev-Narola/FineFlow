@@ -7,7 +7,13 @@ import 'package:line_icons/line_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommonAppbar extends StatelessWidget {
-  const CommonAppbar({super.key});
+  final String? name;
+  final String? imageUrl;
+  const CommonAppbar({
+    super.key,
+    this.name,
+    this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +21,7 @@ class CommonAppbar extends StatelessWidget {
       final hour = DateTime.now().hour;
 
       if (hour >= 0 && hour < 12) {
+        print("image url " + imageUrl!);
         return "Good morning";
       } else if (hour >= 12 && hour < 17) {
         return "Good afternoon";
@@ -27,13 +34,17 @@ class CommonAppbar extends StatelessWidget {
       padding: EdgeInsets.only(right: 14.w),
       child: AppBar(
         elevation: 0,
-        backgroundColor: Kwhite,
+        backgroundColor: Koffwhite,
+        leading: CircleAvatar(
+          child: Image.network(imageUrl!),
+        ),
         title: ReusableText(
-          text: "${getGreetingMessage()}, Dev",
+          text: "${getGreetingMessage()}, $name",
           fontSize: 18,
           color: Kdark,
           fontWeight: FontWeight.w600,
         ),
+        scrolledUnderElevation: 0,
         actions: [
           Stack(children: [
             Icon(

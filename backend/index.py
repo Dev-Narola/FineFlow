@@ -18,4 +18,4 @@ app.register_blueprint(create_user_routes(db, app.config["SECRET_KEY"]), url_pre
 app.register_blueprint(create_finance_report_routes(db), url_prefix='/api/reports')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000, host='0.0.0.0')
