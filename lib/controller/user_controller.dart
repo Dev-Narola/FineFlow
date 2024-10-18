@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, depend_on_referenced_packages
+
 import 'dart:convert';
 import 'package:fineflow0/model/get_user_response/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -9,12 +11,11 @@ class GetUserController extends GetxController {
   var userModel = UserModel(
     name: '',
     email: '',
-    mobileNo: '',
-    userImage: "",
-    createdDate: DateTime.now(),
+    mobile_no: '',
+    user_image: "",
+    created_date: DateTime.now(),
   ).obs;
 
-  // Fetch user data from API using http
   Future<void> getUser() async {
     try {
       isLoading(true);
@@ -22,10 +23,8 @@ class GetUserController extends GetxController {
       String? token = prefs.getString('token');
       String? finalToken = "Bearer $token";
 
-      // Define the API endpoint
       final url = Uri.parse('http://192.168.136.199:5000/api/users/getuser');
 
-      // Make the GET request
       final response = await http.get(
         url,
         headers: {
@@ -33,19 +32,21 @@ class GetUserController extends GetxController {
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
-      // Check if the response was successful
+      // print('Response body: ${response.body}');
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        // Parse the JSON response into UserModel
         userModel.value = UserModel.fromJson(data['user']);
+
+        // print('Name: ${userModel.value.name}');
+        // print('Email: ${userModel.value.email}');
+        // print('Mobile Number: ${userModel.value.mobile_no}');
+        // print('User Image: ${userModel.value.user_image}');
+        // print('Created Date: ${userModel.value.created_date}');
       } else {
-        // Handle API error
-        print('Failed to load user data: ${response.statusCode}');
+        // print('Failed to load user data: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle network errors
       print("Error fetching user data: $e");
     } finally {
       isLoading(false);
@@ -54,3 +55,55 @@ class GetUserController extends GetxController {
 
   UserModel get user => userModel.value;
 }
+
+// class GetUserController1 extends GetxController {
+//   var isLoading = true.obs;
+//   var userModel = UserModel(
+//     name: '',
+//     email: '',
+//     mobile_no: '',
+//     user_image: "",
+//     created_date: DateTime.now(),
+//   ).obs;
+
+//   late ApiService apiService;
+
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     Dio dio = Dio();
+//     apiService = ApiService(dio);
+//   }
+
+//   Future<void> getUser() async {
+//     try {
+//       isLoading(true);
+//       SharedPreferences prefs = await SharedPreferences.getInstance();
+//       String? token = prefs.getString('token');
+//       if (token == null) {
+//         print("Token not found");
+//         return;
+//       }
+
+//       String finalToken = "Bearer $token";
+
+//       // Call the getUser method from the ApiService using Retrofit
+//       UserModel user = await apiService.getUser(finalToken);
+
+//       // Update the userModel with the data from the API response
+//       userModel.value = user;
+
+//       print('Name: ${userModel.value.name}');
+//       print('Email: ${userModel.value.email}');
+//       print('Mobile Number: ${userModel.value.mobile_no}');
+//       print('User Image: ${userModel.value.user_image}');
+//       print('Created Date: ${userModel.value.created_date}');
+//     } catch (e) {
+//       print("Error fetching user data: $e");
+//     } finally {
+//       isLoading(false);
+//     }
+//   }
+
+//   UserModel get user => userModel.value;
+// }

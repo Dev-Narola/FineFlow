@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/constant/constant.dart';
 import 'package:flutter/material.dart';

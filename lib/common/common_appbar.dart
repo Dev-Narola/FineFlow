@@ -21,7 +21,6 @@ class CommonAppbar extends StatelessWidget {
       final hour = DateTime.now().hour;
 
       if (hour >= 0 && hour < 12) {
-        print("image url " + imageUrl!);
         return "Good morning";
       } else if (hour >= 12 && hour < 17) {
         return "Good afternoon";
@@ -35,8 +34,15 @@ class CommonAppbar extends StatelessWidget {
       child: AppBar(
         elevation: 0,
         backgroundColor: Koffwhite,
-        leading: CircleAvatar(
-          child: Image.network(imageUrl!),
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.0.w),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16.r),
+            child: Image.network(
+              imageUrl!,
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         title: ReusableText(
           text: "${getGreetingMessage()}, $name",

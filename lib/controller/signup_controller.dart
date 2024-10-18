@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:dio/dio.dart';
 import 'package:fineflow0/api/api_services.dart';
 import 'package:fineflow0/model/user/user.dart';
@@ -37,7 +39,6 @@ class SignupController extends GetxController {
 
       Get.off(() => const SigninScreen());
     } catch (error) {
-      print("Error : " + error.toString());
       Get.snackbar("Error", error.toString());
     }
   }

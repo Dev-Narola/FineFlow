@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, library_private_types_in_public_api
+
 import 'dart:async';
 
 import 'package:fineflow0/bottom_bar.dart';
@@ -8,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -39,8 +43,6 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Image.network(
         'https://play-lh.googleusercontent.com/NRFa0ykurSkdcQHcikVgkhL-MOJccFmXEnvV3KdwErdNAwE08ZihKZZpGtkCQdO6ud5J',
         fit: BoxFit.cover,
-        // width: double.infinity,
-        // height: double.infinity,
       )),
     );
   }

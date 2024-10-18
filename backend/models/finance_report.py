@@ -2,7 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 
 class FinanceReport:
-    def __init__(self, user_id, name, merchant_name, amount, date, description, category, bill_image=None, tax=None):
+    def __init__(self, user_id, name, merchant_name, amount, date, description, category, bill_image= "https://cdn-icons-png.flaticon.com/128/3875/3875172.png", tax=None):
         self.id = ObjectId()
         self.user_id = ObjectId(user_id)
         self.name = name
@@ -11,7 +11,7 @@ class FinanceReport:
         self.date = date
         self.description = description
         self.category = category
-        self.bill_image = bill_image
+        self.bill_image = str(bill_image)
         self.tax = tax
         self.created_date = datetime.utcnow()
 

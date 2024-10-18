@@ -30,10 +30,9 @@ class FinanceReportController extends GetxController {
         date: date,
         description: description,
         category: category,
-        bill_image: "",
+        bill_image: "https://cdn-icons-png.flaticon.com/128/3875/3875172.png",
         tax: 0,
       );
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
       String? finalToken = "Bearer $token";
@@ -42,15 +41,12 @@ class FinanceReportController extends GetxController {
           await _apiService.addReport(report, finalToken);
       if (response.reportid == null) {
         Get.snackbar("Success", "Finance report added successfully!");
-        print("Report ID: ${response.reportid.toString()}");
         Get.off(() => BottomBar());
       } else {
         Get.snackbar("Error", response.message);
-        print("Error: ${response.message}");
       }
     } catch (e) {
       Get.snackbar("Error", "An error occurred while adding the report.");
-      print("Error: $e");
     }
   }
 }

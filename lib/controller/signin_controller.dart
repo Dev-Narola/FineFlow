@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:dio/dio.dart';
 import 'package:fineflow0/api/api_services.dart';
 import 'package:fineflow0/model/login_user_model/login_model.dart';
@@ -18,15 +20,12 @@ class SigninController extends GetxController {
 
       final response = await _apiService.signin(user);
 
-      // Store the token in SharedPreferences after successful login
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', response.token);
 
-      // Show success message and navigate to the Dashboard
       Get.snackbar("Success", response.message);
       Get.off(() => DashboardPage());
     } catch (error) {
-      print("Error: " + error.toString());
       Get.snackbar("Error", error.toString());
     }
   }

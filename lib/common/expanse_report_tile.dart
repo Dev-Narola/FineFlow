@@ -2,18 +2,18 @@
 
 import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/constant/constant.dart';
+import 'package:fineflow0/model/all_report_response/report_model.dart';
+import 'package:fineflow0/screens/dashboard/view_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ExpanseReportTile extends StatelessWidget {
-  final String title;
-  final String expanse;
-  final String time;
-  const ExpanseReportTile(
-      {super.key,
-      required this.title,
-      required this.expanse,
-      required this.time});
+  final ReportModel report;
+  const ExpanseReportTile({
+    super.key,
+    required this.report,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class ExpanseReportTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ReusableText(
-                  text: title,
+                  text: report.name.toString(),
                   color: Kdark,
                   fontSize: 16.5,
                   fontWeight: FontWeight.bold,
@@ -44,14 +44,14 @@ class ExpanseReportTile extends StatelessWidget {
                   fontHeight: 1.6,
                 ),
                 ReusableText(
-                  text: "expanse : ₹$expanse",
+                  text: "expanse : ₹${report.amount}",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   letterSpace: 0.6,
                   fontHeight: 1.8,
                 ),
                 ReusableText(
-                  text: "added time : $time",
+                  text: "added time : ${report.date}",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   letterSpace: 0.6,
@@ -59,10 +59,21 @@ class ExpanseReportTile extends StatelessWidget {
                 ),
               ],
             ),
-            const ReusableText(
-              text: "View more",
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
+            GestureDetector(
+              onTap: () {
+                Get.to(
+                  () => ViewReport(
+                    report: report,
+                  ),
+                  transition: Transition.fadeIn,
+                  duration: Duration(milliseconds: 500),
+                );
+              },
+              child: ReusableText(
+                text: "View more",
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
             )
           ],
         ),

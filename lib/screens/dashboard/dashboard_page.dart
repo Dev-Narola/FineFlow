@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:fineflow0/common/common_appbar.dart';
 import 'package:fineflow0/common/expanse_report_tile.dart';
 import 'package:fineflow0/common/reusable_text.dart';
@@ -19,8 +21,8 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final reportController = Get.put(GetAllReport());
-  final userController = Get.put(GetUserController());
+  final reportController = Get.put(GetAllReport(), permanent: true);
+  final userController = Get.put(GetUserController(), permanent: true);
 
   @override
   void initState() {
@@ -46,7 +48,7 @@ class _DashboardPageState extends State<DashboardPage> {
           }
           return CommonAppbar(
             name: userController.user.name ?? "User",
-            imageUrl: userController.user.userImage ?? "",
+            imageUrl: userController.user.user_image ?? "",
           );
         }),
       ),
@@ -87,7 +89,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 22.h),
+                  SizedBox(height: 18.h),
                   Expanded(
                     child: Obx(() {
                       if (reportController.isLoading.value) {
@@ -105,9 +107,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 8.0.h),
                             child: ExpanseReportTile(
-                              title: report.name ?? "Unknown",
-                              expanse: report.amount.toString(),
-                              time: report.date ?? "Unknown",
+                              report: report,
                             ),
                           );
                         },
@@ -118,13 +118,17 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
           ),
-          // Positioned Add Expanse Button
           Positioned(
             bottom: 15.h,
             right: 15.w,
             child: GestureDetector(
-              onTap: () {
-                Get.to(() => const AddExpanse());
+              onTap: () async {
+                final result = await Get.to(() => const AddExpanse(),
+                    transition: Transition.fadeIn,
+                    duration: Duration(microseconds: 900));
+                if (result == true) {
+                  await reportController.getAllReport();
+                }
               },
               child: CircleAvatar(
                 radius: 30.r,

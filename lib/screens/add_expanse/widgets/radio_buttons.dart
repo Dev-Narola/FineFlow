@@ -260,19 +260,20 @@ class RadioButtonsState extends State<RadioButtons> {
         const ImageSelectWidget(),
         SizedBox(height: 24.h),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             try {
-              // double amount = double.tryParse(amountController);
-              controller1.addReport(
+              // Save the expense
+              await controller1.addReport(
                   reportNameController.text.trim(),
                   merchantNameController.text.trim(),
                   double.tryParse(amountController.text) ?? 0.0,
                   dateController.text.trim(),
                   descriptionController.text.trim(),
                   dropdownValue);
+              // Go back and return true
+              Get.back(result: true);
             } catch (e) {
               Get.snackbar("Error", "Please check the entered data.");
-              print("Form error: $e");
             }
           },
           child: Container(

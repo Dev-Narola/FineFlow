@@ -6,15 +6,28 @@ part 'report_model.g.dart';
 class ReportModel {
   @JsonKey(name: '_id')
   String? id;
+
   double? amount;
-  String? billImage;
+
+  @JsonKey(name: 'bill_image')
+  String? billImage; // Fix this field name
+
   String? category;
-  String? createdDate;
+
+  @JsonKey(name: 'created_date')
+  String? createdDate; // Fix this field name
+
   String? date;
+
   String? description;
-  String? merchantName;
+
+  @JsonKey(name: 'merchant_name')
+  String? merchantName; // Fix this field name
+
   String? name;
+
   double? tax;
+
   @JsonKey(name: 'user_id')
   String? userId;
 
