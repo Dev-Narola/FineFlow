@@ -44,7 +44,7 @@ def signup(db, secret_key):
     email = data.get("email")
     mobile_no = data.get("mobile_no")
     password = generate_password_hash(data.get("password"))
-    user_image = ""
+    user_image = "https://as2.ftcdn.net/v2/jpg/05/87/66/83/1000_F_587668357_Vco2ldq4Q9aWDH3ynxSOCydf5W1UdvrK.jpg"
 
     if db.users.find_one({"email": email}):
         return jsonify({"error": "User with this email already exists"}), 409
@@ -98,6 +98,56 @@ def get_user(db, secret_key):
         }
 
         return jsonify({"user": user_info}), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "Token has expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"error": "Invalid token"}), 401
+
+def update_user(db, secret_key):
+    # Get the token from Authorization header
+    token = request.headers.get('Authorization', None)
+
+    if not token:
+        return jsonify({"error": "Token missing"}), 401
+
+    try:
+        # Decode the JWT token to extract the user ID
+        decoded_token = jwt.decode(token.split(" ")[1], secret_key, algorithms=["HS256"])
+        user_id = decoded_token.get('sub')
+
+        # Find the user in the database
+        user = db.users.find_one({"_id": ObjectId(user_id)})
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Get the data from the request body
+        data = request.get_json()
+
+        # Prepare the fields that are allowed to be updated
+        update_fields = {}
+        if 'name' in data:
+            update_fields['name'] = data['name']
+        if 'email' in data:
+            # Check if email already exists
+            if db.users.find_one({"email": data['email'], "_id": {"$ne": ObjectId(user_id)}}):
+                return jsonify({"error": "Email is already in use by another account"}), 409
+            update_fields['email'] = data['email']
+        if 'mobile_no' in data:
+            update_fields['mobile_no'] = data['mobile_no']
+        if 'password' in data:
+            update_fields['password'] = generate_password_hash(data['password'])
+        if 'user_image' in data:
+            update_fields['user_image'] = data['user_image']
+
+        # Check if there's anything to update
+        if not update_fields:
+            return jsonify({"error": "No fields to update"}), 400
+
+        # Update the user document in the database
+        db.users.update_one({"_id": ObjectId(user_id)}, {"$set": update_fields})
+
+        return jsonify({"message": "User profile updated successfully"}), 200
 
     except jwt.ExpiredSignatureError:
         return jsonify({"error": "Token has expired"}), 401
