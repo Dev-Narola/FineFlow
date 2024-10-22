@@ -1,20 +1,16 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:dio/dio.dart';
-import 'package:fineflow0/api/api_services.dart';
+import 'dart:convert';
 import 'package:fineflow0/bottom_bar.dart';
+import 'package:fineflow0/constant/constant.dart';
 import 'package:fineflow0/model/finance_report/finance_report_model.dart';
 import 'package:fineflow0/model/finance_report_response/finance_report_response.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class FinanceReportController extends GetxController {
-  late ApiService _apiService;
-  FinanceReportController() {
-    _apiService = ApiService(Dio());
-  }
-
-  Future<void> addReport(
+  Future<bool> addReport(
     String title,
     String name,
     double amount,
@@ -33,20 +29,39 @@ class FinanceReportController extends GetxController {
         bill_image: "https://cdn-icons-png.flaticon.com/128/3875/3875172.png",
         tax: 0,
       );
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
       String? finalToken = "Bearer $token";
 
-      FinanceReportResponse response =
-          await _apiService.addReport(report, finalToken);
-      if (response.reportid == null) {
-        Get.snackbar("Success", "Finance report added successfully!");
-        Get.off(() => BottomBar());
+      final response = await http.post(
+        Uri.parse('$baseUrl/reports/add'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': finalToken,
+        },
+        body: jsonEncode(report.toJson()),
+      );
+
+      if (response.statusCode == 201) {
+        FinanceReportResponse responseData =
+            FinanceReportResponse.fromJson(jsonDecode(response.body));
+
+        if (responseData.reportid == null) {
+          Get.snackbar("Success", "Finance report added successfully!");
+          Get.off(() => BottomBar());
+          return true;
+        } else {
+          Get.snackbar("Error", responseData.message);
+          return false;
+        }
       } else {
-        Get.snackbar("Error", response.message);
+        Get.snackbar("Error", "Failed to add report: ${response.reasonPhrase}");
+        return false;
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred while adding the report.");
+      Get.snackbar("Error", "An error occurred while adding the report: $e");
+      return false;
     }
   }
 }

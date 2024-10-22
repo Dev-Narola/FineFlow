@@ -29,30 +29,36 @@ class CommonAppbar extends StatelessWidget {
       }
     }
 
-    return Padding(
-      padding: EdgeInsets.only(right: 14.w),
-      child: AppBar(
-        elevation: 0,
-        backgroundColor: Koffwhite,
-        leading: Padding(
-          padding: EdgeInsets.only(left: 16.0.w),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.r),
-            child: Image.network(
-              imageUrl!,
-              fit: BoxFit.cover,
-            ),
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Kwhite,
+      leading: Padding(
+        padding: EdgeInsets.only(left: 16.0.w),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.r),
+          child: Image.network(
+            imageUrl!,
+            fit: BoxFit.cover,
           ),
         ),
-        title: ReusableText(
-          text: "${getGreetingMessage()}, $name",
-          fontSize: 18,
-          color: Kdark,
-          fontWeight: FontWeight.w600,
-        ),
-        scrolledUnderElevation: 0,
-        actions: [
-          Stack(children: [
+      ),
+      // bottom: ,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(12.r),
+            bottomLeft: Radius.circular(12.r)),
+      ),
+      title: ReusableText(
+        text: "${getGreetingMessage()}, $name",
+        fontSize: 18,
+        color: Kdark,
+        fontWeight: FontWeight.w600,
+      ),
+      scrolledUnderElevation: 0,
+      actions: [
+        Padding(
+          padding: EdgeInsets.only(right: 20.0.w),
+          child: Stack(children: [
             Icon(
               LineIcons.bell,
               size: 25.dm,
@@ -72,8 +78,8 @@ class CommonAppbar extends StatelessWidget {
               ),
             ),
           ]),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

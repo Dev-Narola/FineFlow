@@ -10,7 +10,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'api_services.g.dart';
 
-@RestApi(baseUrl: "http://192.168.136.199:5000/api")
+@RestApi(baseUrl: "http://192.168.33.199:5000/api")
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
@@ -36,5 +36,11 @@ abstract class ApiService {
   @GET("/users/getuser")
   Future<UserModel> getUser(
     @Header('Authorization') String token,
+  );
+
+  @PUT("/users/updateuser")
+  Future<UserModel> updateUser(
+    @Header('Authorization') String token,
+    @Body() Map<String, dynamic> updateData,
   );
 }

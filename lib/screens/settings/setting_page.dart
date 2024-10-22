@@ -2,7 +2,6 @@
 
 import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/constant/constant.dart';
-import 'package:fineflow0/controller/user_controller.dart';
 import 'package:fineflow0/screens/settings/link_fincial_app.dart';
 import 'package:fineflow0/screens/settings/profile.dart';
 import 'package:fineflow0/screens/settings/set_reminder.dart';
@@ -16,8 +15,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userController = Get.find<GetUserController>();
-
     return Scaffold(
       backgroundColor: Koffwhite,
       appBar: PreferredSize(
@@ -43,34 +40,6 @@ class SettingsPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10.0.w),
           child: Column(
             children: [
-              Obx(() {
-                if (userController.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                return Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100.r),
-                      child: Image.network(
-                        userController.user.user_image!,
-                        height: 130.h,
-                        width: 130.h,
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      "Hello, ${userController.user.name ?? 'User'}",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Kdark,
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                  ],
-                );
-              }),
               GestureDetector(
                 onTap: () {
                   Get.to(() => const Profile());

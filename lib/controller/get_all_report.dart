@@ -1,24 +1,22 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:dio/dio.dart';
-import 'package:fineflow0/api/api_services.dart';
 import 'package:fineflow0/model/all_report_response/report_model.dart';
 import 'package:fineflow0/model/all_report_response/reports_response.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class GetAllReport extends GetxController {
   var reports = <ReportModel>[].obs;
   var isLoading = false.obs;
   var totalExpenses = 0.0.obs;
 
-  late ApiService apiService;
+  final String baseUrl = "http://192.168.33.199:5000/api";
 
   @override
   void onInit() {
     super.onInit();
-    final dio = Dio();
-    apiService = ApiService(dio);
     getAllReport();
   }
 
@@ -33,16 +31,33 @@ class GetAllReport extends GetxController {
       }
 
       String finalToken = "Bearer $token";
+      final url = Uri.parse("$baseUrl/reports/all");
 
-      final ReportsResponseModel fetchedResponse =
-          await apiService.getAllReports(finalToken);
+      // Make the GET request with the token in the headers
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': finalToken,
+          'Content-Type': 'application/json',
+        },
+      );
 
-      if (fetchedResponse.reports.isEmpty) {}
+      if (response.statusCode == 200) {
+        // Parse response body
+        final data = json.decode(response.body);
+        final fetchedResponse = ReportsResponseModel.fromJson(data);
 
-      reports.value = fetchedResponse.reports;
-
-      calculateTotalExpenses();
+        // Update reports and calculate total expenses
+        reports.value = fetchedResponse.reports;
+        calculateTotalExpenses();
+      } else {
+        // Handle non-200 responses
+        final errorData = json.decode(response.body);
+        Get.snackbar(
+            "Error", errorData['message'] ?? 'Failed to fetch reports');
+      }
     } catch (e) {
+      // Catch any errors
       Get.snackbar("Error", "Something went wrong: $e");
     } finally {
       isLoading(false);

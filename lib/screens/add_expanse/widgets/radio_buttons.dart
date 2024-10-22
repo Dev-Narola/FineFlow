@@ -20,8 +20,7 @@ class RadioButtons extends StatefulWidget {
 }
 
 class RadioButtonsState extends State<RadioButtons> {
-  final FinanceReportController controller1 =
-      Get.put(FinanceReportController());
+  final FinanceReportController controller = Get.put(FinanceReportController());
 
   final TextEditingController reportNameController = TextEditingController();
   final TextEditingController merchantNameController = TextEditingController();
@@ -263,13 +262,16 @@ class RadioButtonsState extends State<RadioButtons> {
           onTap: () async {
             try {
               // Save the expense
-              await controller1.addReport(
-                  reportNameController.text.trim(),
-                  merchantNameController.text.trim(),
-                  double.tryParse(amountController.text) ?? 0.0,
-                  dateController.text.trim(),
-                  descriptionController.text.trim(),
-                  dropdownValue);
+              String amount = amountController.text;
+              double finalAmount = double.parse(amount);
+              await controller.addReport(
+                reportNameController.text.trim(),
+                merchantNameController.text.trim(),
+                finalAmount,
+                dateController.text.trim(),
+                descriptionController.text.trim(),
+                dropdownValue,
+              );
               // Go back and return true
               Get.back(result: true);
             } catch (e) {

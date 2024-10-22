@@ -44,7 +44,11 @@ class _DashboardPageState extends State<DashboardPage> {
         preferredSize: Size(width.w, 60.h),
         child: Obx(() {
           if (userController.isLoading.value) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: Kdark,
+              backgroundColor: Koffwhite,
+            ));
           }
           return CommonAppbar(
             name: userController.user.name ?? "User",
@@ -93,15 +97,19 @@ class _DashboardPageState extends State<DashboardPage> {
                   Expanded(
                     child: Obx(() {
                       if (reportController.isLoading.value) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                            child: CircularProgressIndicator(
+                          color: Kdark,
+                          backgroundColor: Koffwhite,
+                        ));
                       }
 
                       if (reportController.reports.isEmpty) {
                         return Center(child: Text("No reports found"));
                       }
-
+                      final recent = reportController.reports.take(7).toList();
                       return ListView.builder(
-                        itemCount: reportController.reports.length,
+                        itemCount: recent.length,
                         itemBuilder: (context, index) {
                           var report = reportController.reports[index];
                           return Padding(
@@ -127,6 +135,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     transition: Transition.fadeIn,
                     duration: Duration(microseconds: 900));
                 if (result == true) {
+                  // Automatically refresh the reports when coming back from the AddExpanse page
                   await reportController.getAllReport();
                 }
               },

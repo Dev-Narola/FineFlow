@@ -17,7 +17,7 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SignupController signupController = Get.put(SignupController());
+    final signupController = Get.put(SignupController());
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     TextEditingController nameController = TextEditingController();
@@ -33,7 +33,7 @@ class SignupScreen extends StatelessWidget {
               Lottie.asset('assets/lottie/auth.json', repeat: false),
               SizedBox(height: 20.h),
               ReusableText(
-                text: "Sign In",
+                text: "Sign Up",
                 fontSize: 28,
                 color: Kdark,
                 fontWeight: FontWeight.bold,
@@ -73,11 +73,20 @@ class SignupScreen extends StatelessWidget {
               ReusableButton(
                 content: "S I G N  U P",
                 onTap: () {
-                  signupController.signupUser(
+                  if (nameController.text.isEmpty ||
+                      emailController.text.isEmpty ||
+                      mobileController.text.isEmpty ||
+                      passwordController.text.isEmpty) {
+                    Get.snackbar("Error", "All fields are required.");
+                  } else {
+                    signupController.signupUser(
                       name: nameController.text,
                       email: emailController.text,
                       mobile: mobileController.text,
-                      password: passwordController.text);
+                      password: passwordController.text,
+                      userImage: null,
+                    );
+                  }
                 },
                 btnHeight: 38.h,
                 backgroundColor: Kdark,
