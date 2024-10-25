@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "465021552594",
+    "project_id": "fineflow-816cc",
+    "storage_bucket": "fineflow-816cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465021552594:android:df54ac1cc4e4a939756a0b",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD55D0RCxsFvtlVYntNekj9kAb7K0h4EQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465021552594:android:f9840b4c6951bb55756a0b",
+        "android_client_info": {
+          "package_name": "com.example.fineflow0"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD55D0RCxsFvtlVYntNekj9kAb7K0h4EQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

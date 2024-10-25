@@ -27,8 +27,11 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    reportController.getAllReport();
-    userController.getUser();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      reportController.getAllReport();
+      userController.getUser();
+    });
   }
 
   Future<void> _refreshReports() async {
@@ -41,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       backgroundColor: Koffwhite,
       appBar: PreferredSize(
-        preferredSize: Size(width.w, 60.h),
+        preferredSize: Size(width.w, 80.h),
         child: Obx(() {
           if (userController.isLoading.value) {
             return Center(

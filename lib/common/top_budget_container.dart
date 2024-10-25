@@ -9,8 +9,7 @@ import '../constant/constant.dart';
 import '../controller/get_all_report.dart';
 
 class TopBudgetContainer extends StatelessWidget {
-  final GetAllReport reportController =
-      Get.find<GetAllReport>(); // Fetch the controller
+  final GetAllReport reportController = Get.find<GetAllReport>();
 
   TopBudgetContainer({super.key});
 
@@ -19,7 +18,7 @@ class TopBudgetContainer extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     return Obx(() {
-      double totalExpenses = reportController.totalExpenses.value;
+      double totalExpenses = reportController.currentMonthExpenses.value;
 
       return Container(
         height: 70.h,

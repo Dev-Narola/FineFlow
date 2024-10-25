@@ -43,14 +43,6 @@ class Profile extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(right: 12.0.w),
-                  child: Icon(
-                    LineIcons.bitbucket,
-                    size: 29,
-                    color: Kred,
-                  ),
-                ),
               ],
             ),
           ]),
@@ -79,29 +71,12 @@ class Profile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(100.r),
                               child: Image.network(
                                 userController.user.user_image!,
+                                fit: BoxFit.cover,
                                 height: 130.h,
                                 width: 130.h,
                               ),
                             ),
                           ),
-                          Positioned(
-                              bottom: 2,
-                              right: 5,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Kdark,
-                                      borderRadius:
-                                          BorderRadius.circular(16.r)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Center(
-                                      child: Icon(
-                                        LineIcons.camera,
-                                        color: Koffwhite,
-                                        size: 27,
-                                      ),
-                                    ),
-                                  )))
                         ],
                       ),
                     ),

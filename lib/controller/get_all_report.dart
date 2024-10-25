@@ -6,11 +6,13 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class GetAllReport extends GetxController {
   var reports = <ReportModel>[].obs;
   var isLoading = false.obs;
   var totalExpenses = 0.0.obs;
+  var currentMonthExpenses = 0.0.obs; // Observable for current month expenses
 
   final String baseUrl = "http://192.168.33.199:5000/api";
 
@@ -70,5 +72,26 @@ class GetAllReport extends GetxController {
       total += report.amount ?? 0;
     }
     totalExpenses.value = total;
+  }
+
+  void calculateCurrentMonthExpenses() {
+    double currentMonthTotal = 0;
+    DateTime now = DateTime.now();
+    String currentMonth = DateFormat('MM').format(now);
+    String currentYear = DateFormat('yyyy').format(now);
+
+    for (var report in reports) {
+      if (report.date != null) {
+        // Parse the report date using the correct format
+        DateTime reportDate = DateFormat('dd-MM-yyyy').parse(report.date!);
+
+        // Check if the report date is in the current month and year
+        if (DateFormat('MM').format(reportDate) == currentMonth &&
+            DateFormat('yyyy').format(reportDate) == currentYear) {
+          currentMonthTotal += report.amount ?? 0;
+        }
+      }
+    }
+    currentMonthExpenses.value = currentMonthTotal;
   }
 }
