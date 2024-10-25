@@ -18,7 +18,7 @@ class TopBudgetContainer extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     return Obx(() {
-      double totalExpenses = reportController.currentMonthExpenses.value;
+      double totalExpenses = reportController.totalExpenses.value;
 
       return Container(
         height: 70.h,
