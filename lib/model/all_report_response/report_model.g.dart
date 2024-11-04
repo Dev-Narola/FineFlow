@@ -18,6 +18,7 @@ ReportModel _$ReportModelFromJson(Map<String, dynamic> json) => ReportModel(
       name: json['name'] as String?,
       tax: (json['tax'] as num?)?.toDouble(),
       userId: json['user_id'] as String?,
+      type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$ReportModelToJson(ReportModel instance) =>
@@ -33,4 +34,5 @@ Map<String, dynamic> _$ReportModelToJson(ReportModel instance) =>
       'name': instance.name,
       'tax': instance.tax,
       'user_id': instance.userId,
+      'type': instance.type,
     };

@@ -7,7 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddExpanse extends StatefulWidget {
-  const AddExpanse({super.key});
+  final String reportName;
+  const AddExpanse({
+    super.key,
+    required this.reportName,
+  });
 
   @override
   State<AddExpanse> createState() => _AddExpanseState();
@@ -45,7 +49,7 @@ class _AddExpanseState extends State<AddExpanse> {
                   fontWeight: FontWeight.w400,
                 ),
                 SizedBox(height: 12.h),
-                const RadioButtons()
+                RadioButtons(reportName: widget.reportName)
               ],
             )),
       ),

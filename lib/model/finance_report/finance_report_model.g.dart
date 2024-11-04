@@ -12,6 +12,7 @@ FinanceReportModel _$FinanceReportModelFromJson(Map<String, dynamic> json) =>
       merchant_name: json['merchant_name'] as String,
       amount: (json['amount'] as num).toDouble(),
       date: json['date'] as String,
+      type: json['type'] as String,
       description: json['description'] as String?,
       category: json['category'] as String,
       bill_image: json['bill_image'] as String?,
@@ -26,6 +27,7 @@ Map<String, dynamic> _$FinanceReportModelToJson(FinanceReportModel instance) =>
       'date': instance.date,
       'description': instance.description,
       'category': instance.category,
+      'type': instance.type,
       'bill_image': instance.bill_image,
       'tax': instance.tax,
     };

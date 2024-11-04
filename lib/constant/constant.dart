@@ -10,6 +10,6 @@ const Kdark = Color.fromARGB(255, 0, 0, 0);
 const Kred = Color.fromARGB(255, 255, 0, 0);
 const Kgreen = Color.fromARGB(255, 0, 255, 0);
 
-final String baseUrl = "http://192.168.33.199:5000/api";
+final String baseUrl = "http://192.168.10.199:5000/api";
 final String defaultImageUrl =
     "https://as2.ftcdn.net/v2/jpg/05/87/66/83/1000_F_587668357_Vco2ldq4Q9aWDH3ynxSOCydf5W1UdvrK.jpg";

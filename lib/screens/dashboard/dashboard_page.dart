@@ -3,11 +3,12 @@
 import 'package:fineflow0/common/common_appbar.dart';
 import 'package:fineflow0/common/expanse_report_tile.dart';
 import 'package:fineflow0/common/reusable_text.dart';
-import 'package:fineflow0/common/top_budget_container.dart';
+import 'package:fineflow0/common/top_budget_container_balance.dart';
+import 'package:fineflow0/common/top_budget_container_total_expanse.dart';
 import 'package:fineflow0/constant/constant.dart';
 import 'package:fineflow0/controller/get_all_report.dart';
 import 'package:fineflow0/controller/user_controller.dart';
-import 'package:fineflow0/screens/add_expanse/add_expanse.dart';
+import 'package:fineflow0/screens/add_expanse/expanse_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
@@ -72,8 +73,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TopBudgetContainer(),
-                      TopBudgetContainer(),
+                      TopBudgetContainerBalance(),
+                      TopBudgetContainerTotalExpanse(),
                     ],
                   ),
                   SizedBox(height: 16.h),
@@ -101,20 +102,21 @@ class _DashboardPageState extends State<DashboardPage> {
                     child: Obx(() {
                       if (reportController.isLoading.value) {
                         return Center(
-                            child: CircularProgressIndicator(
-                          color: Kdark,
-                          backgroundColor: Koffwhite,
-                        ));
+                          child: CircularProgressIndicator(
+                            color: Kdark,
+                            backgroundColor: Koffwhite,
+                          ),
+                        );
                       }
 
-                      if (reportController.reports.isEmpty) {
-                        return Center(child: Text("No reports found"));
+                      final recentReports = reportController.getRecentReports();
+                      if (recentReports.isEmpty) {
+                        return Center(child: Text("No recent reports found"));
                       }
-                      final recent = reportController.reports.take(7).toList();
                       return ListView.builder(
-                        itemCount: recent.length,
+                        itemCount: recentReports.length,
                         itemBuilder: (context, index) {
-                          var report = reportController.reports[index];
+                          var report = recentReports[index];
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 8.0.h),
                             child: ExpanseReportTile(
@@ -134,7 +136,7 @@ class _DashboardPageState extends State<DashboardPage> {
             right: 15.w,
             child: GestureDetector(
               onTap: () async {
-                final result = await Get.to(() => const AddExpanse(),
+                final result = await Get.to(() => const ExpanseReport(),
                     transition: Transition.fadeIn,
                     duration: Duration(microseconds: 900));
                 if (result == true) {

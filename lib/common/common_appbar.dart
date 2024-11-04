@@ -4,6 +4,7 @@ import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:line_icons/line_icons.dart';
 
 class CommonAppbar extends StatelessWidget {
   final String? name;
@@ -40,6 +41,8 @@ class CommonAppbar extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.0.w),
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(imageUrl!),
+                    backgroundColor: Koffwhite,
+                    foregroundColor: Koffwhite,
                     radius: 26.r,
                   ),
                 ),
@@ -57,7 +60,7 @@ class CommonAppbar extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 14.0.w),
               child: Icon(
-                Icons.notification_add,
+                LineIcons.barChartAlt,
                 size: 26.sp,
               ),
             ),

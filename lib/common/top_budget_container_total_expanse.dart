@@ -8,10 +8,10 @@ import 'package:get/get.dart';
 import '../constant/constant.dart';
 import '../controller/get_all_report.dart';
 
-class TopBudgetContainer extends StatelessWidget {
+class TopBudgetContainerTotalExpanse extends StatelessWidget {
   final GetAllReport reportController = Get.find<GetAllReport>();
 
-  TopBudgetContainer({super.key});
+  TopBudgetContainerTotalExpanse({super.key});
 
   @override
   Widget build(BuildContext context) {

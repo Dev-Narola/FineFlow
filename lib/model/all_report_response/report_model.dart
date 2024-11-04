@@ -31,19 +31,21 @@ class ReportModel {
   @JsonKey(name: 'user_id')
   String? userId;
 
-  ReportModel({
-    this.id,
-    this.amount,
-    this.billImage,
-    this.category,
-    this.createdDate,
-    this.date,
-    this.description,
-    this.merchantName,
-    this.name,
-    this.tax,
-    this.userId,
-  });
+  String? type;
+
+  ReportModel(
+      {this.id,
+      this.amount,
+      this.billImage,
+      this.category,
+      this.createdDate,
+      this.date,
+      this.description,
+      this.merchantName,
+      this.name,
+      this.tax,
+      this.userId,
+      this.type});
 
   // Factory constructor to create the object from JSON
   factory ReportModel.fromJson(Map<String, dynamic> json) =>

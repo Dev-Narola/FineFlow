@@ -2,6 +2,7 @@
 
 import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/constant/constant.dart';
+import 'package:fineflow0/controller/get_all_report.dart';
 import 'package:fineflow0/screens/settings/link_fincial_app.dart';
 import 'package:fineflow0/screens/settings/profile.dart';
 import 'package:fineflow0/screens/settings/set_reminder.dart';
@@ -59,8 +60,10 @@ class SettingsPage extends StatelessWidget {
                 child: const Option(title: "Set reminder"),
               ),
               GestureDetector(
-                onTap: () {},
-                child: const Option(title: "Set notification"),
+                onTap: () {
+                  Get.find<GetAllReport>().exportToExcel();
+                },
+                child: const Option(title: "Download expanse report"),
               ),
               GestureDetector(
                 onTap: () {},

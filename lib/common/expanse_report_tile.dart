@@ -35,16 +35,20 @@ class ExpanseReportTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ReusableText(
-                  text: report.name.toString(),
-                  color: Kdark,
-                  fontSize: 16.5,
-                  fontWeight: FontWeight.bold,
-                  letterSpace: 1.3,
-                  fontHeight: 1.6,
+                Row(
+                  children: [
+                    ReusableText(
+                      text: report.name.toString(),
+                      color: Kdark,
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.bold,
+                      letterSpace: 1.3,
+                      fontHeight: 1.6,
+                    ),
+                  ],
                 ),
                 ReusableText(
-                  text: "expanse : ₹${report.amount}",
+                  text: "${report.type} : ₹${report.amount}",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   letterSpace: 0.6,

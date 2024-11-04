@@ -12,6 +12,7 @@ class FinanceReportModel {
   final String date;
   final String? description;
   final String category;
+  final String type;
   final String? bill_image;
   final double? tax;
 
@@ -20,6 +21,7 @@ class FinanceReportModel {
     required this.merchant_name,
     required this.amount,
     required this.date,
+    required this.type,
     required this.description,
     required this.category,
     this.bill_image,

@@ -4,6 +4,7 @@ import 'package:fineflow0/common/reusable_button.dart';
 import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/common/reusable_textfield.dart';
 import 'package:fineflow0/constant/constant.dart';
+import 'package:fineflow0/screens/add_expanse/add_expanse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart.';
@@ -59,9 +60,7 @@ class ExpanseReport extends StatelessWidget {
                     content: "A d d   E x p a n s e",
                     btnHeight: 40,
                     onTap: () {
-                      Get.back(
-                        result: true,
-                      );
+                      Get.to(AddExpanse(reportName: reportNameController.text));
                     },
                   ),
                 ),

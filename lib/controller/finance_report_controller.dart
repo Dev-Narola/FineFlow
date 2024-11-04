@@ -16,6 +16,7 @@ class FinanceReportController extends GetxController {
     double amount,
     String date,
     String description,
+    String type,
     String category,
   ) async {
     try {
@@ -26,6 +27,7 @@ class FinanceReportController extends GetxController {
         date: date,
         description: description,
         category: category,
+        type: type,
         bill_image: "https://cdn-icons-png.flaticon.com/128/3875/3875172.png",
         tax: 0,
       );

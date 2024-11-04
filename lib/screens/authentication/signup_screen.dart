@@ -4,7 +4,7 @@ import 'package:fineflow0/common/reusable_button.dart';
 import 'package:fineflow0/common/reusable_text.dart';
 import 'package:fineflow0/common/reusable_textfield.dart';
 import 'package:fineflow0/constant/constant.dart';
-import 'package:fineflow0/controller/signup_controller.dart';
+import 'package:fineflow0/screens/authentication/initial_balance_screen.dart';
 import 'package:fineflow0/screens/authentication/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +17,6 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final signupController = Get.put(SignupController());
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     TextEditingController nameController = TextEditingController();
@@ -71,22 +70,13 @@ class SignupScreen extends StatelessWidget {
               ),
               SizedBox(height: 15.h),
               ReusableButton(
-                content: "S I G N  U P",
+                content: "N E X T",
                 onTap: () {
-                  if (nameController.text.isEmpty ||
-                      emailController.text.isEmpty ||
-                      mobileController.text.isEmpty ||
-                      passwordController.text.isEmpty) {
-                    Get.snackbar("Error", "All fields are required.");
-                  } else {
-                    signupController.signupUser(
-                      name: nameController.text,
-                      email: emailController.text,
-                      mobile: mobileController.text,
-                      password: passwordController.text,
-                      userImage: null,
-                    );
-                  }
+                  Get.to(InitialBalanceScreen(
+                      nameController: nameController,
+                      emailController: emailController,
+                      mobileController: mobileController,
+                      passwordController: passwordController));
                 },
                 btnHeight: 38.h,
                 backgroundColor: Kdark,

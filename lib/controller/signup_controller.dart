@@ -12,6 +12,7 @@ class SignupController extends GetxController {
     required String email,
     required String mobile,
     required String password,
+    required double InitialBalance,
     String? userImage,
   }) async {
     try {
@@ -22,7 +23,8 @@ class SignupController extends GetxController {
         password: password,
         userImage: defaultImageUrl,
       );
-
+      var userJson = user.toJson();
+      userJson.addAll({"initial_balance": InitialBalance});
       final url = Uri.parse("$baseUrl/users/signup");
 
       final response = await http.post(
@@ -30,10 +32,9 @@ class SignupController extends GetxController {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(user.toJson()),
+        body: jsonEncode(userJson),
       );
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
 
         final prefs = await SharedPreferences.getInstance();
