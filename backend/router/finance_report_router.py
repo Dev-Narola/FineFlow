@@ -1,5 +1,5 @@
 from flask import Blueprint
-from controller.finance_report_controller import add_finance_report, update_finance_report, delete_finance_report, get_all_reports_for_user
+from controller.finance_report_controller import *
 from flask_jwt_extended import jwt_required
 
 def create_finance_report_routes(db):
@@ -24,5 +24,10 @@ def create_finance_report_routes(db):
     @jwt_required()
     def get_reports():
         return get_all_reports_for_user(db)
+    
+    @finance_report_routes.route('/balance', methods=['GET'])
+    @jwt_required()
+    def get_user_balance():
+        return get_balance(db)
 
     return finance_report_routes

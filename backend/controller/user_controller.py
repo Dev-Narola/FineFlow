@@ -1,3 +1,4 @@
+from models.balance_model import Balance  # Import Balance model
 import jwt
 from flask import request, jsonify
 from models.user_model import User
@@ -5,38 +6,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import get_jwt_identity
 from bson import ObjectId
 
-def login(db, secret_key):
-    data = request.get_json()
-    
-    required_fields = ["email", "password"]
-    if not data or not all(field in data for field in required_fields):
-        return jsonify({"error": "Missing required fields"}), 400
-
-    email = data.get('email')
-    password = data.get('password')
-
-    user = db.users.find_one({"email": email})
-    if not user:
-        return jsonify({'error': "Invalid email or password"}), 401
-
-    if not check_password_hash(user['password'], password):
-        return jsonify({'error': "Invalid email or password"}), 401
-
-    # Token without expiration
-    token = jwt.encode(
-        {
-            "sub": str(user["_id"])
-        },
-        secret_key,
-        algorithm="HS256"
-    )
-
-    return jsonify({'message': 'Logged in successfully', "token": token}), 200
-
 def signup(db, secret_key):
     data = request.get_json()
 
-    required_fields = ["name", "email", "mobile_no", "password"]
+    required_fields = ["name", "email", "mobile_no", "password", "initial_balance"]
     if not data or not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields"}), 400
 
@@ -46,14 +19,24 @@ def signup(db, secret_key):
     password = generate_password_hash(data.get("password"))
     user_image = "https://as2.ftcdn.net/v2/jpg/05/87/66/83/1000_F_587668357_Vco2ldq4Q9aWDH3ynxSOCydf5W1UdvrK.jpg"
 
+    # Check if user already exists
     if db.users.find_one({"email": email}):
         return jsonify({"error": "User with this email already exists"}), 409
 
+    # Create the User object
     user = User(name=name, email=email, mobile_no=mobile_no, password=password, user_image=user_image)
 
+    # Insert the user into the database
     user_id = db.users.insert_one(user.to_dict()).inserted_id
 
-    # Token without expiration
+    # Create balance from the initial balance field
+    initial_balance = data.get("initial_balance", 0.0)  # Use provided initial balance or default to 0.0
+    balance = Balance(user_id=user_id, initial_balance=initial_balance)
+    
+    # Insert the balance into the database
+    db.balance.insert_one(balance.to_dict())  # Assuming you have a balances collection
+
+    # Generate JWT token
     token = jwt.encode(
         {
             "sub": str(user_id)
@@ -72,8 +55,27 @@ def signup(db, secret_key):
         "user_id": str(user_id),
         "token": token
     }), 201
+def login(db, secret_key):
+    data = request.get_json()
+    
+    required_fields = ["email", "password"]
+    if not data or not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
 
-from flask_jwt_extended import decode_token
+    email = data.get('email')
+    password = data.get('password')
+
+    user = db.users.find_one({"email": email})
+    if not user:
+        return jsonify({'error': "Invalid email or password"}), 401
+
+    if not check_password_hash(user['password'], password):
+        return jsonify({'error': "Invalid email or password"}), 401
+
+    # Token without expiration
+    token = jwt.encode({"sub": str(user["_id"])}, secret_key, algorithm="HS256")
+
+    return jsonify({'message': 'Logged in successfully', "token": token}), 200
 
 def get_user(db, secret_key):
     token = request.headers.get('Authorization', None)
@@ -82,6 +84,7 @@ def get_user(db, secret_key):
         return jsonify({"error": "Token missing"}), 401
 
     try:
+        # Decode the token and get user ID
         decoded_token = jwt.decode(token.split(" ")[1], secret_key, algorithms=["HS256"])
         user_id = decoded_token.get('sub')
         
@@ -89,12 +92,17 @@ def get_user(db, secret_key):
         if not user:
             return jsonify({"error": "User not found"}), 404
 
+        # Fetch user's balance
+        balance = db.balances.find_one({"user_id": ObjectId(user_id)})
+        current_balance = balance["current_balance"] if balance else 0.0
+
         user_info = {
             "name": user["name"],
             "email": user["email"],
             "mobile_no": user["mobile_no"],
             "user_image": user["user_image"],
-            "created_date": user["created_date"]
+            "created_date": user["created_date"],
+            "balance": current_balance
         }
 
         return jsonify({"user": user_info}), 200
