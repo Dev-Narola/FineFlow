@@ -29,19 +29,18 @@ Welcome to Finance Tracker, a streamlined and user-friendly mobile application d
 - Database: MongoDB
 
 📂 Setup Instructions
--> Clone the Repository:  git clone https://github.com/Dev-Narola/finance-tracker.git
--> Backend Setup:
+- Clone the Repository:  git clone https://github.com/Dev-Narola/finance-tracker.git
+ Backend Setup:
     - Navigate to the backend directory:  cd finance-tracker/backend
     - Install dependencies:  pip install -r requirements.txt
     - Start server: python index.py
     - Set up MongoDB and configure the database URI in your index.py file file.
--> Frontend Setup:
+- Frontend Setup:
     - Ensure Flutter is installed.
     - Navigate to the frontend directory
     - Install dependencies:  flutter pub get
     - Run the App:
-
--> Launch the Flutter app on an emulator or physical device:  flutter run
+- Launch the Flutter app on an emulator or physical device:  flutter run
 
 🤝 Contributing
 Contributions are welcome! Feel free to submit pull requests or open issues for suggestions and improvements.
